@@ -63,7 +63,7 @@ void ToggleAntiCheat()
 					dst.close();
 					remove("start_protected_game.exe.original");
 					logger.Log("Anti-cheat enabled");
-					MessageBox(NULL, "Anti-cheat enabled.", NULL, MB_OK | MB_ICONINFORMATION);
+					MessageBox(NULL, "Anti-cheat enabled.", "Enabled", MB_OK | MB_ICONINFORMATION);
 				}
 				else
 				{
@@ -91,7 +91,7 @@ void ToggleAntiCheat()
 					dst << src.rdbuf();
 					dst.close();
 					logger.Log("Anti-cheat disabled");
-					MessageBox(NULL, "Anti-cheat disabled.", NULL, MB_OK | MB_ICONINFORMATION);
+					MessageBox(NULL, "Anti-cheat disabled.", "Disabled", MB_OK | MB_ICONINFORMATION);
 				}
 				else
 				{

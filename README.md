@@ -5,4 +5,4 @@ Using this tool should be the preferred method as the old method where you repla
 
 Download link: [NexusMods](https://www.nexusmods.com/eldenring/mods/90)
 
-![Anti-cheat disabled]()
+![Anti-cheat disabled](https://github.com/techiew/EldenRingEacToggler/blob/master/picture.png)

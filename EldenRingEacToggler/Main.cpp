@@ -83,7 +83,7 @@ void ToggleAntiCheat()
 			bool originalFileRenamed = rename("start_protected_game.exe", "start_protected_game.exe.original") == 0;
 			if (originalFileRenamed)
 			{
-				logger.Log("Renamed existing start_protected_game.exe");
+				logger.Log("Renamed original start_protected_game.exe");
 				std::ifstream src("toggle_anti_cheat.exe", std::ios::binary);
 				if (src.is_open())
 				{
@@ -102,8 +102,8 @@ void ToggleAntiCheat()
 			}
 			else
 			{
-				logger.Log("Failed to rename existing start_protected_game.exe");
-				MessageBox(NULL, "Failed to disable the anti-cheat, failed to rename start_protected_game.exe.", NULL, MB_OK | MB_ICONERROR);
+				logger.Log("Failed to rename original start_protected_game.exe");
+				MessageBox(NULL, "Failed to disable the anti-cheat, failed to rename start_protected_game.exe. Does start_protected_game.exe.original already exist?", NULL, MB_OK | MB_ICONERROR);
 			}
 		}
 	}

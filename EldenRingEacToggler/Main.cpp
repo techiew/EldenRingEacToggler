@@ -50,6 +50,20 @@ void ToggleAntiCheat()
 		}
 		else if (isOurExecutable)
 		{
+			std::ifstream proxyDll("XInput1_4.dll", std::ios::binary);
+			if(proxyDll.is_open()) 
+			{
+				logger.Log("XInput1_4.dll exists");
+				proxyDll.close();
+				bool proxyDllRenamed = rename("XInput1_4.dll", "_XInput1_4.dll") == 0;
+				if (!proxyDllRenamed)
+				{
+					logger.Log("Failed to rename XInput1_4.dll");
+					MessageBox(NULL, "Failed to enable the anti-cheat, please manually rename XInput1_4.dll to _XInput1_4.dll.", NULL, MB_OK | MB_ICONERROR);
+					return;
+				}
+			}
+
 			bool fileRemoved = remove("start_protected_game.exe") == 0;
 			if (fileRemoved)
 			{
@@ -63,7 +77,7 @@ void ToggleAntiCheat()
 					dst.close();
 					remove("start_protected_game.exe.original");
 					logger.Log("Anti-cheat enabled");
-					MessageBox(NULL, "Anti-cheat enabled.", "Enabled", MB_OK | MB_ICONINFORMATION);
+					MessageBox(NULL, "Anti-cheat enabled. Remember to turn off external mods such as Flawless Widescreen!", "Enabled", MB_OK | MB_ICONINFORMATION);
 				}
 				else
 				{
@@ -80,6 +94,30 @@ void ToggleAntiCheat()
 		} 
 		else
 		{
+			std::ifstream proxyDll("_XInput1_4.dll", std::ios::binary);
+			if (proxyDll.is_open())
+			{
+				logger.Log("_XInput1_4.dll exists");
+				proxyDll.close();
+				bool proxyDllRenamed = rename("_XInput1_4.dll", "XInput1_4.dll") == 0;
+				if (!proxyDllRenamed)
+				{
+					logger.Log("Failed to rename _XInput1_4.dll");
+					MessageBox(NULL, "Failed to disable the anti-cheat, could not rename _XInput1_4.dll. Please manually rename _XInput1_4.dll to XInput1_4.dll.", NULL, MB_OK | MB_ICONERROR);
+					return;
+				}
+			}
+			else
+			{
+				proxyDll.close();
+				proxyDll.open("XInput1_4.dll", std::ios::binary);
+				if (!proxyDll.is_open()) {
+					MessageBox(NULL, "Failed to disable the anti-cheat, _XInput1_4.dll does not exist! Either manually rename _XInput1_4.dll to XInput1_4.dll or try to reinstall this tool.", NULL, MB_OK | MB_ICONERROR);
+					return;
+				}
+				proxyDll.close();
+			}
+
 			bool originalFileRenamed = rename("start_protected_game.exe", "start_protected_game.exe.original") == 0;
 			if (originalFileRenamed)
 			{

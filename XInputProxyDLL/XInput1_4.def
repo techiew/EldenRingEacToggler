@@ -1,0 +1,10 @@
+LIBRARY XInput1_4
+EXPORTS
+	DllMain=PROXY_DllMain @1
+	XInputEnable=PROXY_XInputEnable @2
+	XInputGetAudioDeviceIds=PROXY_XInputGetAudioDeviceIds @3
+	XInputGetBatteryInformation=PROXY_XInputGetBatteryInformation @4
+	XInputGetCapabilities=PROXY_XInputGetCapabilities @5
+	XInputGetKeystroke=PROXY_XInputGetKeystroke @6
+	XInputGetState=PROXY_XInputGetState @7
+	XInputSetState=PROXY_XInputSetState @8

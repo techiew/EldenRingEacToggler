@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="Jump.asm">
+    <None Include="winhttp.def">
       <Filter>Source Files</Filter>
-    </MASM>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XInput1_4.cpp">
+    <ClCompile Include="winhttp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XInput1_4.def">
+    <MASM Include="Jump.asm">
       <Filter>Source Files</Filter>
-    </None>
+    </MASM>
   </ItemGroup>
 </Project>

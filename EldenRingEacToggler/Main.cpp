@@ -39,7 +39,7 @@ void ToggleAntiCheat()
 	{
 		logger.Log(".exe file size: %i", fileInfo.st_size);
 
-		bool isOurExecutable = fileInfo.st_size < 100000;
+		bool isOurExecutable = fileInfo.st_size < 500000;
 		bool isActuallyGameExecutable = fileInfo.st_size > 40000000;
 
 		if (isActuallyGameExecutable)
@@ -50,16 +50,16 @@ void ToggleAntiCheat()
 		}
 		else if (isOurExecutable)
 		{
-			std::ifstream proxyDll("XInput1_4.dll", std::ios::binary);
+			std::ifstream proxyDll("winhttp.dll", std::ios::binary);
 			if(proxyDll.is_open()) 
 			{
-				logger.Log("XInput1_4.dll exists");
+				logger.Log("winhttp.dll exists");
 				proxyDll.close();
-				bool proxyDllRenamed = rename("XInput1_4.dll", "_XInput1_4.dll") == 0;
+				bool proxyDllRenamed = rename("winhttp.dll", "_winhttp.dll") == 0;
 				if (!proxyDllRenamed)
 				{
-					logger.Log("Failed to rename XInput1_4.dll");
-					MessageBox(NULL, "Failed to enable the anti-cheat, please manually rename XInput1_4.dll to _XInput1_4.dll.", NULL, MB_OK | MB_ICONERROR);
+					logger.Log("Failed to rename winhttp.dll");
+					MessageBox(NULL, "Failed to enable the anti-cheat, please manually rename winhttp.dll to _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 			}
@@ -94,25 +94,25 @@ void ToggleAntiCheat()
 		} 
 		else
 		{
-			std::ifstream proxyDll("_XInput1_4.dll", std::ios::binary);
+			std::ifstream proxyDll("_winhttp.dll", std::ios::binary);
 			if (proxyDll.is_open())
 			{
-				logger.Log("_XInput1_4.dll exists");
+				logger.Log("_winhttp.dll exists");
 				proxyDll.close();
-				bool proxyDllRenamed = rename("_XInput1_4.dll", "XInput1_4.dll") == 0;
+				bool proxyDllRenamed = rename("_winhttp.dll", "winhttp.dll") == 0;
 				if (!proxyDllRenamed)
 				{
-					logger.Log("Failed to rename _XInput1_4.dll");
-					MessageBox(NULL, "Failed to disable the anti-cheat, could not rename _XInput1_4.dll. Please manually rename _XInput1_4.dll to XInput1_4.dll.", NULL, MB_OK | MB_ICONERROR);
+					logger.Log("Failed to rename _winhttp.dll");
+					MessageBox(NULL, "Failed to disable the anti-cheat, could not rename _winhttp.dll. Please manually rename _winhttp.dll to winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 			}
 			else
 			{
 				proxyDll.close();
-				proxyDll.open("XInput1_4.dll", std::ios::binary);
+				proxyDll.open("winhttp.dll", std::ios::binary);
 				if (!proxyDll.is_open()) {
-					MessageBox(NULL, "Failed to disable the anti-cheat, _XInput1_4.dll does not exist! Either manually rename _XInput1_4.dll to XInput1_4.dll or try to reinstall this tool.", NULL, MB_OK | MB_ICONERROR);
+					MessageBox(NULL, "Failed to disable the anti-cheat, _winhttp.dll does not exist! Either manually rename _winhttp.dll to winhttp.dll or try to reinstall this tool.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 				proxyDll.close();
@@ -141,7 +141,7 @@ void ToggleAntiCheat()
 			else
 			{
 				logger.Log("Failed to rename original start_protected_game.exe");
-				MessageBox(NULL, "Failed to disable the anti-cheat, failed to rename start_protected_game.exe. Does start_protected_game.exe.original already exist?", NULL, MB_OK | MB_ICONERROR);
+				MessageBox(NULL, "Failed to disable the anti-cheat, failed to rename start_protected_game.exe. Delete start_protected_game.exe.original if it already exists.", NULL, MB_OK | MB_ICONERROR);
 			}
 		}
 	}

@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EldenRingEacToggler", "EldenRingEacToggler.vcxproj", "{6CA9EC08-2C33-40FB-AE69-114AC5339F2C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XInputProxyDLL", "..\XInputProxyDLL\XInputProxyDLL.vcxproj", "{D74F9CB6-047B-4CF4-A0F9-AC4209255B0E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinHttpProxyDLL", "..\WinHttpProxyDLL\WinHttpProxyDLL.vcxproj", "{353F8E92-D406-44AF-9D55-46C75B349B2E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OfflineLauncher", "..\OfflineLauncher\OfflineLauncher.vcxproj", "{72F9A720-43D9-48E2-A71F-5380B393813F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,8 +16,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6CA9EC08-2C33-40FB-AE69-114AC5339F2C}.Release|x64.ActiveCfg = Release|x64
 		{6CA9EC08-2C33-40FB-AE69-114AC5339F2C}.Release|x64.Build.0 = Release|x64
-		{D74F9CB6-047B-4CF4-A0F9-AC4209255B0E}.Release|x64.ActiveCfg = Release|x64
-		{D74F9CB6-047B-4CF4-A0F9-AC4209255B0E}.Release|x64.Build.0 = Release|x64
+		{353F8E92-D406-44AF-9D55-46C75B349B2E}.Release|x64.ActiveCfg = Release|x64
+		{353F8E92-D406-44AF-9D55-46C75B349B2E}.Release|x64.Build.0 = Release|x64
+		{72F9A720-43D9-48E2-A71F-5380B393813F}.Release|x64.ActiveCfg = Release|x64
+		{72F9A720-43D9-48E2-A71F-5380B393813F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

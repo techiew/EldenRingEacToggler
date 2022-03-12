@@ -77,6 +77,7 @@ void ToggleAntiCheat()
 					src.close();
 					dst.close();
 					remove("start_protected_game.exe.original");
+					rename("steam_appid.txt", "_steam_appid.txt");
 					logger.Log("Anti-cheat enabled");
 					MessageBox(NULL, "Anti-cheat enabled. Remember to turn off external mods such as Flawless Widescreen!", "Enabled", MB_OK | MB_ICONINFORMATION);
 				}
@@ -129,6 +130,7 @@ void ToggleAntiCheat()
 					std::ofstream dst("start_protected_game.exe", std::ios::binary);
 					dst << src.rdbuf();
 					dst.close();
+					rename("_steam_appid.txt", "steam_appid.txt");
 					logger.Log("Anti-cheat disabled");
 					MessageBox(NULL, "Anti-cheat disabled.", "Disabled", MB_OK | MB_ICONINFORMATION);
 				}

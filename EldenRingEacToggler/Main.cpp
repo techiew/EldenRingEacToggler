@@ -26,6 +26,7 @@ std::string GetNameOfSelf(std::string exePath)
 
 void StartGame()
 {
+	SetEnvironmentVariableA("SteamAppId", "1245620"); // For some reason some people need this for the game to launch???
 	ShellExecute(NULL, "open", "eldenring.exe", NULL, NULL, SW_SHOWDEFAULT);
 	logger.Log("Started game");
 }
@@ -59,7 +60,7 @@ void ToggleAntiCheat()
 				if (!proxyDllRenamed)
 				{
 					logger.Log("Failed to rename winhttp.dll");
-					MessageBox(NULL, "Failed to enable the anti-cheat, please manually rename winhttp.dll to _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
+					MessageBox(NULL, "Failed to enable the anti-cheat, does _winhttp.dll already exist? Please manually rename winhttp.dll to _winhttp.dll or delete _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 			}
@@ -103,7 +104,7 @@ void ToggleAntiCheat()
 				if (!proxyDllRenamed)
 				{
 					logger.Log("Failed to rename _winhttp.dll");
-					MessageBox(NULL, "Failed to disable the anti-cheat, could not rename _winhttp.dll. Please manually rename _winhttp.dll to winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
+					MessageBox(NULL, "Failed to disable the anti-cheat, could not rename _winhttp.dll. Does winhttp.dll already exist? Please manually rename _winhttp.dll to winhttp.dll or delete winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 			}
@@ -166,5 +167,6 @@ int main(int argc, char* argv[])
 		ToggleAntiCheat();
 	}
 
+	logger.CloseFile();
 	return 0;
 }

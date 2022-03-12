@@ -31,6 +31,19 @@ public:
 		va_end(args);
 	}
 
+	void CloseFile()
+	{
+		if (LogFile(nullptr) != nullptr)
+		{
+			fclose(LogFile(nullptr));
+		}
+	}
+
+	~Logger()
+	{
+		CloseFile();
+	}
+
 private:
 	std::string m_printPrefix = "";
 

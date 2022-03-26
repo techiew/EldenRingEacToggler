@@ -21,12 +21,19 @@ std::string GetNameOfSelf(std::string exePath)
 		tokens.push_back(token);
 		logger.Log("Token: %s", token.c_str());
 	}
+
+	if (tokens[tokens.size() - 2] != "Game")
+	{
+		MessageBox(NULL, "This tool must be run from within the game root folder! For example: 'G:\\SteamLibrary\\steamapps\\common\\ELDEN RING\\Game'.", NULL, MB_OK | MB_ICONERROR);
+		return "";
+	}
+
 	return tokens.back();
 }
 
 void StartGame()
 {
-	SetEnvironmentVariableA("SteamAppId", "1245620"); // For some reason some people need this for the game to launch???
+	SetEnvironmentVariableA("SteamAppId", "1245620");
 	ShellExecute(NULL, "open", "eldenring.exe", NULL, NULL, SW_SHOWDEFAULT);
 	logger.Log("Started game");
 }
@@ -44,7 +51,6 @@ void ToggleAntiCheat()
 		bool isActuallyGameExecutable = fileInfo.st_size > 40000000;
 
 		if (isActuallyGameExecutable)
-		
 		{
 			logger.Log("start_protected_game.exe is a copy of the game executable");
 			MessageBox(NULL, "Looks like start_protected_game.exe is a copy of the game executable. Please remove it and replace it with the original EasyAntiCheat executable. If you don't have it then you can verify your game files through Steam to get it back.", NULL, MB_OK | MB_ICONERROR);
@@ -56,11 +62,12 @@ void ToggleAntiCheat()
 			{
 				logger.Log("winhttp.dll exists");
 				proxyDll.close();
+				remove("_winhttp.dll");
 				bool proxyDllRenamed = rename("winhttp.dll", "_winhttp.dll") == 0;
 				if (!proxyDllRenamed)
 				{
 					logger.Log("Failed to rename winhttp.dll");
-					MessageBox(NULL, "Failed to enable the anti-cheat, does _winhttp.dll already exist? Please manually rename winhttp.dll to _winhttp.dll or delete _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
+					MessageBox(NULL, "Failed to enable the anti-cheat, could not rename winhttp.dll. Please manually rename winhttp.dll to _winhttp.dll or delete _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 					return;
 				}
 			}
@@ -69,22 +76,17 @@ void ToggleAntiCheat()
 			if (fileRemoved)
 			{
 				logger.Log("Removed start_protected_game.exe");
-				std::ifstream src("start_protected_game.exe.original", std::ios::binary);
-				if (src.is_open())
+				bool exeRenamed = rename("start_protected_game.exe.original", "start_protected_game.exe") == 0;
+				if (exeRenamed)
 				{
-					std::ofstream dst("start_protected_game.exe", std::ios::binary);
-					dst << src.rdbuf();
-					src.close();
-					dst.close();
-					remove("start_protected_game.exe.original");
 					rename("steam_appid.txt", "_steam_appid.txt");
+					remove("steam_appid.txt");
 					logger.Log("Anti-cheat enabled");
 					MessageBox(NULL, "Anti-cheat enabled. Remember to turn off external mods such as Flawless Widescreen!", "Enabled", MB_OK | MB_ICONINFORMATION);
 				}
 				else
 				{
-					logger.Log("Failed to copy start_protected_game.exe.original");
-					src.close();
+					logger.Log("Failed to rename start_protected_game.exe.original");
 					MessageBox(NULL, "Failed to enable the anti-cheat, please manually rename start_protected_game.exe.original to start_protected_game.exe or verify your game files through Steam.", NULL, MB_OK | MB_ICONERROR);
 				}
 			}
@@ -101,6 +103,7 @@ void ToggleAntiCheat()
 			{
 				logger.Log("_winhttp.dll exists");
 				proxyDll.close();
+				remove("winhttp.dll");
 				bool proxyDllRenamed = rename("_winhttp.dll", "winhttp.dll") == 0;
 				if (!proxyDllRenamed)
 				{
@@ -120,10 +123,12 @@ void ToggleAntiCheat()
 				proxyDll.close();
 			}
 
+			remove("start_protected_game.exe.original");
 			bool originalFileRenamed = rename("start_protected_game.exe", "start_protected_game.exe.original") == 0;
 			if (originalFileRenamed)
 			{
 				logger.Log("Renamed original start_protected_game.exe");
+
 				std::ifstream src("toggle_anti_cheat.exe", std::ios::binary);
 				if (src.is_open())
 				{
@@ -131,6 +136,7 @@ void ToggleAntiCheat()
 					dst << src.rdbuf();
 					dst.close();
 					rename("_steam_appid.txt", "steam_appid.txt");
+					remove("_steam_appid.txt");
 					logger.Log("Anti-cheat disabled");
 					MessageBox(NULL, "Anti-cheat disabled.", "Disabled", MB_OK | MB_ICONINFORMATION);
 				}
@@ -158,6 +164,12 @@ void ToggleAntiCheat()
 int main(int argc, char* argv[])
 {
 	std::string name = GetNameOfSelf(argv[0]);
+
+	if (name == "")
+	{
+		return 1;
+	}
+
 	logger.Log("Name: %s", name.c_str());
 
 	if (name == "start_protected_game.exe")

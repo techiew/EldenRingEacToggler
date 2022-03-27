@@ -148,6 +148,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ini.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

@@ -242,7 +242,7 @@ void ToggleAntiCheat()
 	{
 		logger.Log(".exe file size: %i", fileInfo.st_size);
 
-		bool isOurExecutable = fileInfo.st_size < 500000;
+		bool isOurExecutable = fileInfo.st_size < 1000000;
 		bool isActuallyGameExecutable = fileInfo.st_size > 40000000;
 
 		if (isActuallyGameExecutable)

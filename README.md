@@ -3,7 +3,7 @@ Simple convenience tool which lets you easily enable and disable EasyAntiCheat f
 
 ## Why use this tool?
 Using this tool has some advantages over other methods:
-- It ensures the anti-cheat will not launch no matter how you start the game - consistency.
+- It ensures the anti-cheat will not launch no matter how you start the game.
 - It is faster than toggling it manually.
 - It will not cause issues after a game update (unless start_protected_game.exe is patched in the update).
 - It will automatically toggle Elden Mod Loader mods.

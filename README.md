@@ -1,5 +1,5 @@
 # Elden Ring EAC Toggler
-Simple convenience tool which lets you easily enable and disable EasyAntiCheat for Elden Ring. *Note:* this forces the game into offline mode.
+Simple convenience tool which lets you easily enable and disable EasyAntiCheat for Elden Ring. **Note:** disabling EAC forces the game into offline mode.
 
 ## Why use this tool?
 Using this tool has some advantages over other methods:

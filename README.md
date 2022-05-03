@@ -1,10 +1,17 @@
-## Elden Ring EAC Toggler
-Simple tool which lets you easily enable and disable EasyAntiCheat for Elden Ring.
+# Elden Ring EAC Toggler
+Simple convenience tool which lets you easily enable and disable EasyAntiCheat for Elden Ring. **Note:** disabling EAC forces the game into offline mode.
 
-Using this tool should be the preferred method of disabling EasyAntiCheat as the old method where you replace "start_protected_game.exe" with a copy of "eldenring.exe" will cause issues after a game update. Using the old method, if you launch the game through Steam after the game has been updated, it will launch the game using the old copy of the executable (That is, start_protected_game.exe), effectively making you play an older game version. Other methods also have downsides.
+## Why use this tool?
+Using this tool has some advantages over other methods:
+- It ensures the anti-cheat will not launch no matter how you start the game.
+- It is faster than toggling it manually.
+- It will not cause issues after a game update (unless start_protected_game.exe is patched in the update).
+- It can automatically toggle Elden Mod Loader mods.
 
-winhttp.dll is simply a dummy proxy .dll whose only function is to stop EasyAntiCheat from loading if a game update replaces our modified "start_protected_game.exe" with the original EasyAntiCheat executable (which I'm pretty sure it doesn't do every time). In that case, EAC will stop the game on startup because of the untrusted system file "winhttp.dll".
+## Winhttp.dll
+winhttp.dll is simply a dummy proxy .dll whose only function is to stop EasyAntiCheat from loading if a game update replaces our modified "start_protected_game.exe" with the original EasyAntiCheat executable. In which case EAC will refuse to let the game launch because of the untrusted system file "winhttp.dll".
 
+## Download
 Download link: [NexusMods](https://www.nexusmods.com/eldenring/mods/90)
 
 ![Anti-cheat disabled](https://github.com/techiew/EldenRingEacToggler/blob/master/picture.png)

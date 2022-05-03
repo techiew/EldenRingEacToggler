@@ -13,6 +13,24 @@ using namespace mINI;
 
 Logger logger{ "AntiCheatToggler" };
 static bool autoToggleMods = true;
+std::vector<std::string> defaultModsToToggle = {
+	"d3d12.dll",
+	"dxgi.dll",
+	"ws2_32.dll",
+	"winmm.dll",
+	"crypt32.dll",
+	"user32.dll",
+	"gdi32.dll",
+	"advapi32.dll",
+	"shell32.dll",
+	"ole32.dll",
+	"oleaut32.dll",
+	"imm32.dll",
+	"setupapi.dll",
+	"wldap32.dll",
+	"xinput1_4.dll",
+	"dinput8.dll"
+};
 
 std::string GetNameOfSelf(std::string exePath)
 {
@@ -61,46 +79,58 @@ void StartGame()
 
 void ToggleOtherProxyDlls(bool disableAnticheat)
 {
+	std::string modListFileName = "anti_cheat_toggler_mod_list.txt";
+	std::fstream modList(modListFileName, std::ios::in);
+	std::vector<std::string> modsToToggle = defaultModsToToggle;
+
 	if (disableAnticheat)
 	{
-		rename("_d3d12.dll", "d3d12.dll");
-		rename("_dxgi.dll", "dxgi.dll");
-		rename("_ws2_32.dll", "ws2_32.dll");
-		rename("_winmm.dll", "winmm.dll");
-		rename("_crypt32.dll", "crypt32.dll");
-		rename("_user32.dll", "user32.dll");
-		rename("_gdi32.dll", "gdi32.dll");
-		rename("_advapi32.dll", "advapi32.dll");
-		rename("_shell32.dll", "shell32.dll");
-		rename("_ole32.dll", "ole32.dll");
-		rename("_oleaut32.dll", "oleaut32.dll");
-		rename("_imm32.dll", "imm32.dll");
-		rename("_setupapi.dll", "setupapi.dll");
-		rename("_wldap32.dll", "wldap32.dll");
-		rename("_xinput1_4.dll", "xinput1_4.dll");
-		rename("_dinput8.dll", "dinput8.dll");
-		logger.Log("Mods enabled");
+		logger.Log("Enabling mods");
 	}
 	else
 	{
-		rename("d3d12.dll", "_d3d12.dll");
-		rename("dxgi.dll", "_dxgi.dll");
-		rename("ws2_32.dll", "_ws2_32.dll");
-		rename("winmm.dll", "_winmm.dll");
-		rename("crypt32.dll", "_crypt32.dll");
-		rename("user32.dll", "_user32.dll");
-		rename("gdi32.dll", "_gdi32.dll");
-		rename("advapi32.dll", "_advapi32.dll");
-		rename("shell32.dll", "_shell32.dll");
-		rename("ole32.dll", "_ole32.dll");
-		rename("oleaut32.dll", "_oleaut32.dll");
-		rename("imm32.dll", "_imm32.dll");
-		rename("setupapi.dll", "_setupapi.dll");
-		rename("wldap32.dll", "_wldap32.dll");
-		rename("xinput1_4.dll", "_xinput1_4.dll");
-		rename("dinput8.dll", "_dinput8.dll");
-		logger.Log("Mods disabled");
+		logger.Log("Disabling mods");
 	}
+
+	if (modList.is_open())
+	{
+		modsToToggle.clear();
+		std::string modName = "";
+		while (std::getline(modList, modName))
+		{
+			logger.Log("%s", modName);
+			modsToToggle.push_back(modName);
+		}
+	}
+	else
+	{
+		modList.close();
+		modList.open(modListFileName, std::ios::out);
+		if (modList.is_open())
+		{
+			for (auto fileName : defaultModsToToggle)
+			{
+				modList << fileName << '\n';
+			}
+		}
+		else
+		{
+			logger.Log("Failed to open %s", modListFileName);
+		}
+	}
+
+	for (auto modName : modsToToggle) {
+		if (disableAnticheat)
+		{
+			rename(std::string("_" + modName).c_str(), modName.c_str());
+		}
+		else
+		{
+			rename(modName.c_str(), std::string("_" + modName).c_str());
+		}
+	}
+
+	modList.close();
 }
 
 void ToggleWinHttpProxyDll(bool disableAnticheat)
@@ -114,11 +144,9 @@ void ToggleWinHttpProxyDll(bool disableAnticheat)
 			winHttpDll.close();
 			remove("winhttp.dll");
 			bool winHttpDllRenamed = rename("_winhttp.dll", "winhttp.dll") == 0;
-			if (!winHttpDllRenamed)
+			if (winHttpDllRenamed == false)
 			{
 				logger.Log("Failed to rename _winhttp.dll");
-				MessageBox(NULL, "Failed to enable the safeguard, could not rename _winhttp.dll. Does winhttp.dll already exist? Please manually rename _winhttp.dll to winhttp.dll or delete winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
-				return;
 			}
 		}
 		else
@@ -126,17 +154,11 @@ void ToggleWinHttpProxyDll(bool disableAnticheat)
 			logger.Log("_winhttp.dll does not exist");
 			winHttpDll.close();
 			winHttpDll.open("winhttp.dll", std::ios::binary);
-			if (!winHttpDll.is_open())
+			if (winHttpDll.is_open() == false)
 			{
-				MessageBox(NULL, "Failed to enable the safeguard, _winhttp.dll does not exist! Either manually rename _winhttp.dll to winhttp.dll or try to reinstall this tool.", NULL, MB_OK | MB_ICONERROR);
-				return;
+				logger.Log("Could not enable safeguard, winhttp.dll has been deleted");
 			}
 			winHttpDll.close();
-		}
-
-		if (autoToggleMods)
-		{
-			ToggleOtherProxyDlls(disableAnticheat);
 		}
 	}
 	else
@@ -148,18 +170,18 @@ void ToggleWinHttpProxyDll(bool disableAnticheat)
 			winHttpDll.close();
 			remove("_winhttp.dll");
 			bool proxyDllRenamed = rename("winhttp.dll", "_winhttp.dll") == 0;
-			if (!proxyDllRenamed)
+			if (proxyDllRenamed == false)
 			{
 				logger.Log("Failed to rename winhttp.dll");
 				MessageBox(NULL, "Failed to disable the safeguard, could not rename winhttp.dll. Please manually rename winhttp.dll to _winhttp.dll or delete _winhttp.dll.", NULL, MB_OK | MB_ICONERROR);
 				return;
 			}
 		}
+	}
 
-		if (autoToggleMods)
-		{
-			ToggleOtherProxyDlls(disableAnticheat);
-		}
+	if (autoToggleMods)
+	{
+		ToggleOtherProxyDlls(disableAnticheat);
 	}
 }
 
@@ -244,7 +266,6 @@ void ToggleAntiCheat()
 
 		bool isOurExecutable = fileInfo.st_size < 1000000;
 		bool isActuallyGameExecutable = fileInfo.st_size > 40000000;
-
 		if (isActuallyGameExecutable)
 		{
 			logger.Log("start_protected_game.exe is a copy of the game executable");
@@ -268,7 +289,7 @@ void ToggleAntiCheat()
 	else 
 	{
 		logger.Log("start_protected_game.exe does not exist");
-		MessageBox(NULL, "start_protected_game.exe does not exist, please verify your game files through Steam.", NULL, MB_OK | MB_ICONERROR);
+		MessageBox(NULL, "Could not find start_protected_game.exe, please move anti_cheat_toggler.exe into the game folder or try to verify your game files through Steam.", NULL, MB_OK | MB_ICONERROR);
 	}
 }
 
